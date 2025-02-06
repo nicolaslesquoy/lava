@@ -1,0 +1,1 @@
+// Contains functions for freeing ressources the library.
