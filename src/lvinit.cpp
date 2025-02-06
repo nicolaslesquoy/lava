@@ -1,5 +1,6 @@
 #include "lvinit.hpp"
-// TODO(nlesquoy): add proper error handling and debug mode -> compatible with existing error handling from VMA, VkBootstrap and Vulkan proper
+// TODO(nlesquoy): add proper error handling and debug mode -> compatible with
+// existing error handling from VMA, VkBootstrap and Vulkan proper
 
 VulkanError init_vulkan(VulkanContext& ctx)
 {
@@ -38,6 +39,36 @@ VulkanError init_vulkan(VulkanContext& ctx)
     if(vmaCreateAllocator(&allocatorInfo, &ctx.allocator) != VK_SUCCESS) {
         return VulkanError{
             "Failed to create VMA allocator: VMA allocation failed", false};
+    }
+
+    return VulkanError{"", true};
+}
+
+VulkanError create_shader_module(VulkanContext& ctx,
+                                 const std::string& filename,
+                                 VkShaderModule& shader_module)
+{
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+    if(!file.is_open()) {
+        return VulkanError{"Failed to open shader file", false};
+    }
+
+    size_t file_size = (size_t)file.tellg();
+    std::vector<char> buffer(file_size);
+
+    file.seekg(0);
+    file.read(buffer.data(), file_size);
+    file.close();
+
+    VkShaderModuleCreateInfo create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    create_info.codeSize = buffer.size();
+    create_info.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
+
+    if(vkCreateShaderModule(ctx.device.device, &create_info, nullptr,
+                            &shader_module)
+       != VK_SUCCESS) {
+        return VulkanError{"Failed to create shader module", false};
     }
 
     return VulkanError{"", true};

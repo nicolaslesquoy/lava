@@ -11,6 +11,9 @@
 #define VMA_IMPLEMENTATION
 #include "vk_mem_alloc.h"
 
+#ifndef LVINIT_HPP
+#define LVINIT_HPP
+
 // Structs definitions
 struct VulkanContext {
     vkb::Instance instance;
@@ -40,3 +43,11 @@ struct ComputePipeline {
     VkCommandPool command_pool;
     VkCommandBuffer command_buffer;
 };
+
+VulkanError init_vulkan(VulkanContext& ctx);
+
+VulkanError create_shader_module(VulkanContext& ctx,
+                                 const std::string& filename,
+                                 VkShaderModule& shader_module);
+
+#endif // LVINIT_HPP
