@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(vulkan_example)
+project(vulkan_lib)
 
 # Find Vulkan and glslc compiler
 find_package(Vulkan REQUIRED)
@@ -23,17 +23,21 @@ target_include_directories(VulkanMemoryAllocator INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator/include)
 
 # Project executable
-add_executable(vulkan_example 
-    src/example.cpp
+add_executable(vulkan_lib
+    src/main.cpp
+    src/lvinit.cpp
+    src/lvrun.cpp
+    src/lvcleanup.cpp
+    src/vma.cpp
 )
-add_dependencies(vulkan_example shaders)
+add_dependencies(vulkan_lib shaders)
 
-target_include_directories(vulkan_example PRIVATE 
+target_include_directories(vulkan_lib PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${Vulkan_INCLUDE_DIRS}
 )
 
-target_link_libraries(vulkan_example PRIVATE
+target_link_libraries(vulkan_lib PRIVATE
     vk-bootstrap
     VulkanMemoryAllocator
     Vulkan::Vulkan

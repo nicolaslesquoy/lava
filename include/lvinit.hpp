@@ -8,7 +8,6 @@
 
 // Third-party libraries
 #include <VkBootstrap.h>
-#define VMA_IMPLEMENTATION
 #include "vk_mem_alloc.h"
 
 #ifndef LVINIT_HPP
@@ -45,6 +44,10 @@ struct ComputePipeline {
 };
 
 VulkanError init_vulkan(VulkanContext& ctx);
+
+VulkanError create_host_visible_buffer(VulkanContext& ctx, Buffer& buffer,
+                                       VkDeviceSize size,
+                                       VkBufferUsageFlags usage);
 
 VulkanError create_shader_module(VulkanContext& ctx,
                                  const std::string& filename,

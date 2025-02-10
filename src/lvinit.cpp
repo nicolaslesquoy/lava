@@ -44,6 +44,32 @@ VulkanError init_vulkan(VulkanContext& ctx)
     return VulkanError{"", true};
 }
 
+VulkanError create_host_visible_buffer(VulkanContext& ctx, Buffer& buffer,
+                                       VkDeviceSize size,
+                                       VkBufferUsageFlags usage)
+{
+    VkBufferCreateInfo buffer_info = {};
+    buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    buffer_info.size = size;
+    buffer_info.usage = usage;
+    buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    VmaAllocationCreateInfo alloc_info = {};
+    alloc_info.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+    alloc_info.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT;
+
+    VmaAllocationInfo allocation_info;
+    if(vmaCreateBuffer(ctx.allocator, &buffer_info, &alloc_info, &buffer.buffer,
+                       &buffer.allocation, &allocation_info)
+       != VK_SUCCESS) {
+        return VulkanError{"Failed to create buffer", false};
+    }
+
+    buffer.mapped_data = allocation_info.pMappedData;
+    buffer.size = size;
+    return VulkanError{"", true};
+}
+
 VulkanError create_shader_module(VulkanContext& ctx,
                                  const std::string& filename,
                                  VkShaderModule& shader_module)
