@@ -9,4 +9,10 @@
 
 This library will rely on [VulkanMemoryAllocator (VMA)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) and [vk-Bootstrap](https://github.com/charles-lunarg/vk-bootstrap) for Vulkan initialization.
 
-## 
+## Current status
+
+This project is currently in the early stages of development. The `main` branch contains a somewhat working example for a simple GPGPU computing program. The `dev` branch contains the latest changes and updates. Once a feature is stable, it will be merged into the `main` branch.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE.txt) file for details.
